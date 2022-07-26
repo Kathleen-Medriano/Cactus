@@ -1,0 +1,40 @@
+def simTrial(n_grid,blocks,form_block,block_code,maintain_order=False,verbose=False,):
+
+  # Input:
+  # n_grid: (scalar) size of grid
+  # blocks: (array of int; each int corresponds to 1 BB and the sequence of ints in the array is randomized) identifies which blocks to use from the set of primitive BBs, expects array and then go through sequentially
+  # form_block: (array of arrays; each of which specifies the form of each primitive building block) shape of blocks, called by 'blocks'
+  # block code: (array of int; each int corresponds to BBs) used to identify which block is the certain portion of the silhouette from 
+  # maintain_order: (boolean) used to "track completion of silhouette"
+  # verbose: (boolean) used to display details
+  # idea is to work with linear indices on grid
+
+
+  # Output:
+  # final_Form: (matrix of n_grid x n_grid) 
+  # final_Coord: (matrix of n_grid x n_grid)
+
+
+  n_blocks = np.size(blocks,0)
+
+  # initialise form
+  final_Form = np.zeros((n_grid,n_grid))
+
+  # initialise coordinates
+  final_Coord = np.zeros((n_grid,n_grid))
+ 
+  #start with first building block
+  current_form = np.array(form_block[blocks[0]])  
+
+  # obtain coordinate information in reduced grid
+  final_Coord[np.unravel_index(current_form, (n_grid,n_grid), order='F')] = block_code[0] # move from linear index into grid (matrix)
+
+  #specify bounds on grid - to control we are not moving outside of grid
+  up_bound    = np.arange(n_grid**2-(n_grid-1),n_grid)
+  low_bound   = np.arange((n_grid-1),n_grid**2,n_grid)
+  left_bound  = np.arange(n_grid)
+  right_bound = np.arange(n_grid**2-n_grid,n_grid**2)
+
+
+
+return final_Form, final_Coord
