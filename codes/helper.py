@@ -1,3 +1,8 @@
+# Imports
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams['figure.figsize'] = [15, 5]
+
 #@title Helper functions for plotting
 
 def mkPlot_subplots_LinIdx(form_linIdx,n_grid=20,n_grid_reduced=10,title='Stim ',cols=3,rows=3):

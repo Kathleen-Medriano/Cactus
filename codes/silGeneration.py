@@ -1,6 +1,10 @@
 # create script for the generation of silhouettes based on the adjacency matrix
 # i can also generalize adjacency matrix creation
 
+import numpy as np
+import simTrial
+from helper import *
+
 ####  Basic Settings
 
 # Settings for stim simulation
@@ -99,8 +103,8 @@ plt.yticks([0,1,2,3,4,5], tick_Lab_short)
 plt.xticks([0,1,2,3,4,5], tick_Lab_short)
 plt.show()
 
-np.save("Adjacency.npy", Adjacency)
-np.save("starting_set.npy", starting_set)
+#np.save("Adjacency.npy", Adjacency)
+#np.save("starting_set.npy", starting_set)
 
 
 ###  Find random stims
@@ -182,9 +186,9 @@ for idx_sim in np.arange(n_sim):
       idx_unique += 1 
       # print("Bingo, found another. Now have " + str(idx_unique))      
 
-  if idx_sim%10 == 0:
-    print('Trial ' + str(idx_sim) + ' of ' + str(n_sim) + ' done.')
-    print("Found " + str(idx_unique) + " so far.")    
+#  if idx_sim%10 == 0:
+#    print('Trial ' + str(idx_sim) + ' of ' + str(n_sim) + ' done.')
+#    print("Found " + str(idx_unique) + " so far.")    
 
 final_Sil_random    = final_Sil_random[0:idx_unique,:,:].astype(int)
 final_Coord_random  = final_Coord_random[0:idx_unique,:,:].astype(int)
@@ -194,6 +198,7 @@ coord_Blocks_random = coord_Blocks_random[0:idx_unique,:,:].astype(int)
 print("Found " + str(idx_unique) + " in total.")
 
 ### simulate actual experiment
+
 n_sim = len(trial_type)
 
 final_Sil    = np.zeros((n_sim,n_grid_reduced,n_grid_reduced))
@@ -220,9 +225,7 @@ stims_use[trial_type==2] = mainTask_sil_random
 # print(stims_use)
 
 final_Sil[trial_type==2,:,:] = final_Sil_random[mainTask_sil_random,:,:].astype(int)
-
 solutions[trial_type==2,:] = solutions_random[mainTask_sil_random,:].astype(int)
-
 coord_Blocks[trial_type==2,:,:] = coord_Blocks_random[mainTask_sil_random,:,:].astype(int)
 
 for idx in np.arange(n_sim):
