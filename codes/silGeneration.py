@@ -1,9 +1,10 @@
-# create script for the generation of silhouettes based on the adjacency matrix
-# i can also generalize adjacency matrix creation
-
 import numpy as np
-import simTrial
+from simTrial import simTrial
 from helper import *
+from datetime import datetime
+
+#
+
 
 ####  Basic Settings
 
@@ -61,11 +62,11 @@ form_BB = [
           [starting_point,   starting_point-1,          starting_point-2]
           ]
 
-if do_plot:
-  mkPlot_subplots_LinIdx(form_BB,n_grid,n_grid_reduced,'BB ',2,3)
+#if do_plot:
+#  mkPlot_subplots_LinIdx(form_BB,n_grid,n_grid_reduced,'BB ',2,3)
 
 
-####  Adjacency 
+####  Adjacency: currently the adjacency is defined as whether blocks are allowed to be right next to each other
 
 Adjacency = np.zeros((len(form_BB),len(form_BB)))
 
@@ -95,16 +96,19 @@ print(Adjacency)
 tick_Lab_short = ["BB0","BB1","BB2","BB3","BB4","BB5"]
 
 
-plt.rcParams['figure.figsize'] = [5, 5]
+#plt.rcParams['figure.figsize'] = [5, 5]
 
-plt.imshow(Adjacency)
-plt.title('Generating Adjency')
-plt.yticks([0,1,2,3,4,5], tick_Lab_short)
-plt.xticks([0,1,2,3,4,5], tick_Lab_short)
-plt.show()
+#plt.imshow(Adjacency)
+#plt.title('Generating Adjency')
+#plt.yticks([0,1,2,3,4,5], tick_Lab_short)
+#plt.xticks([0,1,2,3,4,5], tick_Lab_short)
+#plt.show()
 
-#np.save("Adjacency.npy", Adjacency)
-#np.save("starting_set.npy", starting_set)
+
+print('checking the adjacency run')
+tstp = datetime.now().strftime("%Y%m%d-%H%M%S")
+np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\adjacency\\Adjacency_{tstp}.npy", Adjacency)
+np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\adjacency\\starting-set_{tstp}.npy", starting_set)
 
 
 ###  Find random stims
@@ -231,3 +235,10 @@ coord_Blocks[trial_type==2,:,:] = coord_Blocks_random[mainTask_sil_random,:,:].a
 for idx in np.arange(n_sim):
   coord_Blocks[idx,:,3] = idx
 # coord_Blocks[:,:,3] = np.tile(np.arange(n_sim),20)
+
+
+# saving the silhouettes
+np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\silhouettes\\final_Sil{tstp}.npy", final_Sil)
+np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\silhouettes\\solutions_{tstp}.npy", solutions)
+np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\silhouettes\\coord_Blocks_{tstp}.npy", coord_Blocks)
+

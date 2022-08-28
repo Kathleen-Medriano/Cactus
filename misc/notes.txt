@@ -1,0 +1,22 @@
+
+Notes from:
+
+main.py
+
+To do:
+- imagine code organization
+    - what to do with adjacency matrix? (i want to generalize its creation)
+    - then i want to save adjacency along with the sillhouette creation (like a run tag/id)
+- develop simple model 
+    - do I want this model to learn just one adjacency matrix? 
+    - oh an interesting thing: learn how to learn adjacency matrix???
+
+Goal is to finish this two, Saturday night??
+
+
+This is wrong!
+
+    # main thing to consider, should i treat "solution_array" as an ordered sequence where the order informs which is connected to each other?
+    # I'm assuming the ordered sequence since that's how the stimulus generation was designed
+
+Remember what Misi said: there are always two of you the EXPERIMENTER and the MODELER, the experimenter has access to this knowledge, the MODELER knows that the agent does not have this knowledge

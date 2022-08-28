@@ -1,3 +1,5 @@
+import numpy as np
+
 def simTrial(n_grid,blocks,form_block,block_code,maintain_order=False,verbose=False,):
 
   # Input:
@@ -15,7 +17,7 @@ def simTrial(n_grid,blocks,form_block,block_code,maintain_order=False,verbose=Fa
   # final_Coord: (matrix of n_grid x n_grid) matrix with the BB_codes, to identify BBs used and the orientation of the BBs
 
   # number of blocks to use
-  n_blocks = np.isize(blocks,0)
+  n_blocks = np.size(blocks,0)
 
   # initialise form
   final_Form = np.zeros((n_grid,n_grid))

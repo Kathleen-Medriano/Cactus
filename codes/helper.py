@@ -428,7 +428,7 @@ def block_sequence(Adjacency,starting_set=[],seq_length=4,verbose=False):
 
     # Pick a first block
     if len(starting_set)==0:
-      use_blocks.append(np.random.choice(blocks[np.sum(Adjacency,1)!=0],1)[0]) # find first block
+      use_blocks.append(np.random.choice(blocks[np.sum(Adjacency,1)!=0],1)[0]) # find first block // checks if the sum along each column is not equal to zero, then that block is allowed for usage
     else:
       use_blocks.append(np.random.choice(starting_set,1)[0]) # find first block # // i don't understand what this is for, maybe accounts for the case when starting_set isn't initially empty
 
@@ -436,11 +436,12 @@ def block_sequence(Adjacency,starting_set=[],seq_length=4,verbose=False):
       print(use_blocks)
 
     for idx_next in np.arange(1,seq_length):
-      next_block = blocks[Adjacency[use_blocks[-1],:]==1] # find allowed next blocks
-      next_block = np.setdiff1d(next_block,use_blocks) # of those, remove those that are already used   
+      #next_block = blocks[Adjacency[use_blocks[-1],:]==1] # find allowed next blocks // sequential adding of blocks
+      next_block = blocks[Adjacency[use_blocks[-1],:]>0] # find allowed next blocks // sequential adding of blocks // not just discrete 1 (yes, connected) or 0 (no, not connected) // incorporate probability in this case
+      next_block = np.setdiff1d(next_block,use_blocks) # of those, remove those that are already used // just checks that already used blocks are filtered
 
       if len(next_block)>0: 
-        use_blocks.append(np.random.choice(next_block,1)[0]) # add them
+        use_blocks.append(np.random.choice(next_block,1)[0]) # add them // add randomly from all the the possible blocks
 
       if verbose:
         print(use_blocks)
@@ -453,3 +454,72 @@ def block_sequence(Adjacency,starting_set=[],seq_length=4,verbose=False):
       sim_done = True
 
   return use_blocks
+
+
+### Helper functions for main.py
+
+def tuple_counter(row):
+
+  """Counts the number of times a pair of consecutive elements appeared in an array. """
+
+  # Input:
+  # row (a one dimensional array)
+
+  # Output:
+  # tuple_dict (dictionary) the keys are tuples with 2 consecutive elements, values are the number of times the tuple (consecutive elements) appeared in the array
+
+  tuple_dict = {}
+
+  for i in np.arange(len(row)-1): # not including the last element in the array
+    tuple_ = (row[i],row[i+1]) # collect the consecutive elements in a tuple
+    if tuple_ in tuple_dict.keys():
+      tuple_dict[tuple_] += 1
+    else:
+      tuple_dict[tuple_] = 1
+
+  return tuple_dict
+
+
+def ignore_operation_diag(matrix, operation):
+
+  """Don't do the operation on the diagonal of a matrix"""
+  # Input:
+
+  # matrix
+  # operation: (scalar operation)
+
+  (x,y) = matrix.shape
+
+  for i in np.arange(x):
+    for j in np.arange(y):
+      if i!=j: 
+        matrix[i,j] = operation(matrix[i,j])
+
+  return matrix
+
+
+### Helper function for adjacency generation 
+
+def adjacency_generation(n_prim=6):
+
+  """Defines an adjacency matrix of n_prim x n_prim dimensions"""
+
+  adjacency = np.zeros((n_prim,n_prim))
+
+  for i in np.arange(n_prim):
+    for j in np.arange(i+1,n_prim):
+      while True:
+        try:
+          connection = float(input(f"Please input adjacency value for building blocks {i} and {j}:"))
+        except ValueError:
+          print("Please input a valid value. Must be between 0 and 1")
+          continue
+        else:
+          break
+      adjacency[i,j] = connection
+
+    adjacency = np.triu(adjacency)
+    adjacency = adjacency + adjacency.T - np.diag(np.diag(adjacency))
+
+  return adjacency
+
