@@ -94,6 +94,7 @@ def simTrial(n_grid,blocks,form_block,block_code,maintain_order=False,verbose=Fa
 
   return final_Form, final_Coord
 
+# Logic:
 # 1. the set BB of primitive building blocks is defined
 # 2. a subset UB from BB is taken, this consists of the primitive building blocks used for the silhouette; in the current tangram task |UB| = 4
 # 3. one BB_i from the set UB is chosen as the first block to use for the silhoette

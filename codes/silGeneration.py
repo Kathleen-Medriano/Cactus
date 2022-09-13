@@ -1,30 +1,20 @@
+# Silhouette generation script
+
 import numpy as np
 from simTrial import simTrial
 from helper import *
 from datetime import datetime
 
-#
-
-
 ####  Basic Settings
 
-# Settings for stim simulation
-# n_trial_types = 3
 n_trial_types = 1
-
-# n_sim   = 210 # how many stims to simulate
-# n_sim   = 180 # how many stims to simulate
 n_stims_use = 30 # how many different stims per condition
 n_rep_stim = 5 # rep per stimulus
 n_sim   = n_stims_use*n_rep_stim*n_trial_types # how many stims to simulate
 
 n_sim_2AFC = 60
 
-# n_sim_minesweeper = 63
-# n_sim_minesweeper = 60
 n_sim_minesweeper = 45
-# n_sim_minesweeper = 52
-# n_sim_minesweeper = 30
 
 do_plot = True; # plot stims and solutions
 
@@ -41,14 +31,9 @@ starting_point = int(n_grid**2/2-(n_grid/2))
 # 1 <=> silhouette consists of 1 chunk and 2 primitive building blocks
 # 2 <=> silhouette consists of 4 primitive building blocks
 # trial_type = np.random.permutation(np.tile(np.array([0,1,2]), int(n_sim/3))
-trial_type = np.add(np.ones((n_stims_use*n_rep_stim)),1).astype(int)
-# trial_type_minesweeper = np.random.permutation(np.tile(np.array([0,1,2]), int(n_sim_minesweeper/3)))
-# trial_type_minesweeper = np.random.permutation(np.tile(np.array([0,1]), int(n_sim_minesweeper/2)))
-# trial_type_minesweeper = np.random.permutation(np.tile(np.array([0,0,1]), int(15)))
-# trial_type_minesweeper = np.random.permutation(np.tile(np.array([0,0,0,1]), int(13)))
-trial_type_minesweeper = np.zeros((int(n_sim_minesweeper))).astype(int)
-# print(trial_type_minesweeper)
 
+trial_type = np.add(np.ones((n_stims_use*n_rep_stim)),1).astype(int)
+trial_type_minesweeper = np.zeros((int(n_sim_minesweeper))).astype(int)
 
 ####  Generate Building Blocks
 
@@ -61,10 +46,6 @@ form_BB = [
           [starting_point,   starting_point+n_grid,     starting_point+n_grid*2],
           [starting_point,   starting_point-1,          starting_point-2]
           ]
-
-#if do_plot:
-#  mkPlot_subplots_LinIdx(form_BB,n_grid,n_grid_reduced,'BB ',2,3)
-
 
 ####  Adjacency: currently the adjacency is defined as whether blocks are allowed to be right next to each other
 
@@ -86,32 +67,13 @@ Adjacency[5,[0,2,4]] = 1
 
 starting_set = [0,4,1,3]
 
-# Adjacency = np.ones((len(form_BB),len(form_BB)))
-# Adjacency[np.diag_indices_from(Adjacency)] = 0
-# Adjacency[0,2] = 0
-# Adjacency[2,0] = 0
-
-print(Adjacency)
-
-tick_Lab_short = ["BB0","BB1","BB2","BB3","BB4","BB5"]
-
-
-#plt.rcParams['figure.figsize'] = [5, 5]
-
-#plt.imshow(Adjacency)
-#plt.title('Generating Adjency')
-#plt.yticks([0,1,2,3,4,5], tick_Lab_short)
-#plt.xticks([0,1,2,3,4,5], tick_Lab_short)
-#plt.show()
-
-
 print('checking the adjacency run')
 tstp = datetime.now().strftime("%Y%m%d-%H%M%S")
 np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\adjacency\\Adjacency_{tstp}.npy", Adjacency)
 np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\adjacency\\starting-set_{tstp}.npy", starting_set)
 
 
-###  Find random stims
+### Find random stims
 n_sim = 200
 
 final_Sil_random    = np.zeros((n_sim,n_grid_reduced,n_grid_reduced))
@@ -201,7 +163,7 @@ coord_Blocks_random = coord_Blocks_random[0:idx_unique,:,:].astype(int)
 
 print("Found " + str(idx_unique) + " in total.")
 
-### simulate actual experiment
+###  Simulate actual experiment
 
 n_sim = len(trial_type)
 
@@ -237,8 +199,8 @@ for idx in np.arange(n_sim):
 # coord_Blocks[:,:,3] = np.tile(np.arange(n_sim),20)
 
 
-# saving the silhouettes
+### Saving the silhouettes
+
 np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\silhouettes\\final_Sil{tstp}.npy", final_Sil)
 np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\silhouettes\\solutions_{tstp}.npy", solutions)
 np.save(f"C:\\Users\\kmedriano\\Documents\\Cactus\\tests\\silhouettes\\coord_Blocks_{tstp}.npy", coord_Blocks)
-
